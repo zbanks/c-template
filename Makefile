@@ -2,9 +2,11 @@ TARGET = my_binary
 
 CC=gcc
 
-CFLAGS = -std=c11 -Wall -Wextra -Wconversion -Werror -D_DEFAULT_SOURCE -Isrc/
-CFLAGS += -ggdb3 -O0
-#CFLAGS += -O3
+CFLAGS += -std=c11 -D_DEFAULT_SOURCE
+CFLAGS += -Wall -Wextra -Wconversion -Werror
+CFLAGS += -ggdb3
+CFLAGS += -O3
+CFLAGS += -Isrc/
 LFLAGS = 
 
 $(shell mkdir -p build)
@@ -19,9 +21,12 @@ build/%.o: src/%.c
 $(TARGET): $(OBJECTS)
 	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $@
 
-.PHONY: clean
+.PHONY: format clean all
+format:
+	clang-format -i src/*.c src/*.h
+
 clean:
-	-rm -rf build my_binary
+	-rm -rf build $(TARGET)
 
 .PHONY: all
 all: $(TARGET)
